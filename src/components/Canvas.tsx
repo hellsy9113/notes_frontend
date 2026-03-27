@@ -1,10 +1,11 @@
-import { useEffect } from "react";
-import { ReactFlow, Background, Controls, MiniMap, NodeTypes } from "@xyflow/react";
+import { useEffect, memo } from "react";
+import { ReactFlow, Background, Controls, MiniMap } from "@xyflow/react";
+import type { NodeTypes } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import NoteNode from "./NoteNode";
 import { useNodes } from "../hooks/useNodes";
 
-const nodeTypes: NodeTypes = { noteNode: NoteNode };
+const nodeTypes: NodeTypes = { noteNode: NoteNode as any };
 
 export default function Canvas() {
   const { nodes, loadNodes, addNode, onNodesChange, onNodeDragStop } = useNodes();

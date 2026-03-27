@@ -1,6 +1,8 @@
 import { useState, useCallback } from "react";
-import { Node, applyNodeChanges, NodeChange, NodeDragHandler } from "@xyflow/react";
-import { NoteNodeData, NoteRecord } from "../types";
+import type { MouseEvent } from "react";
+import type { Node, NodeChange } from "@xyflow/react";
+import { applyNodeChanges } from "@xyflow/react";
+import type { NoteNodeData, NoteRecord } from "../types";
 
 const API = "http://localhost:5000";
 
@@ -22,21 +24,26 @@ export function useNodes() {
     });
   }, []);
 
+  const deleteNode = useCallback(async (id: string) => {
+    setNodes((nds) => nds.filter((n) => n.id !== id));
+    await fetch(`${API}/nodes/${id}`, { method: "DELETE" });
+  }, []);
+
   const loadNodes = useCallback(async () => {
     try {
       const res = await fetch(`${API}/nodes`);
       const data: NoteRecord[] = await res.json();
       const formatted: NoteNode[] = data.map((n) => ({
         id: n._id,
-        type: "noteNode",
+        type: "noteNode" as const,
         position: { x: n.x, y: n.y },
-        data: { label: n.content, onTextChange: updateText },
+        data: { label: n.content, onTextChange: updateText, onDelete: deleteNode },
       }));
       setNodes(formatted);
     } catch (err) {
       console.error("Failed to load nodes", err);
     }
-  }, [updateText]);
+  }, [updateText, deleteNode]);
 
   const addNode = useCallback(async () => {
     const position = {
@@ -54,9 +61,9 @@ export function useNodes() {
         ...nds,
         {
           id: saved._id,
-          type: "noteNode",
+          type: "noteNode" as const,
           position,
-          data: { label: "New Note", onTextChange: updateText },
+          data: { label: "New Note", onTextChange: updateText, onDelete: deleteNode },
         },
       ]);
     } catch (err) {
@@ -64,7 +71,7 @@ export function useNodes() {
     }
   }, [updateText]);
 
-  const onNodeDragStop: NodeDragHandler = useCallback(async (_, node) => {
+  const onNodeDragStop = useCallback(async (_: MouseEvent, node: NoteNode) => {
     await fetch(`${API}/nodes/${node.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -74,9 +81,9 @@ export function useNodes() {
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) =>
-      setNodes((nds) => applyNodeChanges(changes, nds)),
+      setNodes((nds) => applyNodeChanges(changes, nds) as NoteNode[]),
     []
   );
 
-  return { nodes, loadNodes, addNode, onNodesChange, onNodeDragStop };
+  return { nodes, loadNodes, addNode, onNodesChange, onNodeDragStop, deleteNode };
 }
