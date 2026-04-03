@@ -1,13 +1,98 @@
-*, *::before, *::after {
+/*
+ * Summary: Global CSS styling including typography, CSS resets, custom properties for the graph background, animations, and React Flow overrides.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  padding: 0;
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #131313;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #e5e2e1;
 }
 
-#root {
-  width: 100%;
-  height: 100vh;
+/* === Graph Paper Background === */
+.graph-paper {
+  background-image:
+    linear-gradient(to right, rgba(0, 242, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 242, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(to right, rgba(0, 242, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 242, 255, 0.04) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+}
+
+/* === Material Symbols === */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* === Glassmorphism === */
+.glass {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* === Node Glow === */
+.node-glow {
+  box-shadow: 0 0 48px rgba(0, 242, 255, 0.15);
+}
+
+/* === React Flow Overrides === */
+.react-flow__renderer {
+  background: transparent !important;
+}
+
+
+
+.react-flow__controls {
+  display: none !important;
+}
+
+.react-flow__minimap {
+  display: none !important;
+}
+
+.react-flow__attribution {
+  display: none !important;
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #0e0e0e; }
+::-webkit-scrollbar-thumb { background: #3a494b; border-radius: 2px; }
+
+/* === Animations === */
+@keyframes pulse-ring {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+
+@keyframes glow-bar {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.5; }
 }

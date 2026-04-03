@@ -1,5 +1,17 @@
-import Canvas from "./components/Canvas";
+/**
+ * Summary: Main application wrapper component handling global layout and rendering the FlowCanvas.
+ */
+import FlowCanvas from './components/FlowCanvas';
+import { ReactFlowProvider } from '@xyflow/react';
 
-export default function App() {
-  return <Canvas />;
+function App() {
+  return (
+    <div className="w-screen h-screen">
+      <ReactFlowProvider>
+        <FlowCanvas />
+      </ReactFlowProvider>
+    </div>
+  );
 }
+
+export default App;
